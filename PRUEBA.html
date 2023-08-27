@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actualización en Tiempo Real</title>
+</head>
+<body>
+    <h1>Datos en Tiempo Real</h1>
+    <div id="datos-container"></div>
+    <style>
+        table {
+            border-collapse: collapse; /* Combina los bordes de las celdas para formar un borde continuo */
+            width: 100%; /* Ajusta el ancho de la tabla según tus necesidades */
+        }
+
+        th, td {
+            border: 1px solid #000; /* Define el estilo de borde y el color (en este caso, negro) */
+            padding: 8px; /* Añade espaciado interno para hacer que los datos sean más legibles */
+            text-align: left; /* Alinea el contenido a la izquierda */
+        }
+
+        /* Personaliza más estilos si es necesario */
+    </style>
+
+    <h1>Tabla de Datos</h1>
+    <table id="tabla-datos">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Coordenada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se agregarán filas de datos dinámicamente -->
+        </tbody>
+    </table>
+
+    <script>
+        var tabla = document.getElementById('tabla-datos');
+        var maxFilas = 12; // Número máximo de filas a mostrar
+        var conta = 0
+
+        // Función para incrementar el contador
+        function incrementarContador() {
+            conta++;
+        }
+        // Función para agregar una fila en la parte superior de la tabla
+        function agregarFilaEnLaParteSuperior(nombre, valor) {
+            var fila = tabla.insertRow(1); // Insertar en la posición 1 (parte superior)
+            var celdaNombre = fila.insertCell(0);
+            var celdaValor = fila.insertCell(1);
+            celdaNombre.innerHTML = nombre;
+            celdaValor.innerHTML = valor;
+    
+            // Verificar si hay más filas de las permitidas y borrar las más antiguas
+            var filas = tabla.getElementsByTagName('tr');
+            if (filas.length > maxFilas) {
+                tabla.deleteRow(filas.length - 1); // Borrar la última fila (la más antigua)
+            }
+        }
+    
+        // Función para manejar eventos SSE
+        var source = new EventSource("/stream");
+    
+        source.onmessage = function(event) {
+            var nuevoDato = event.data;
+            // Agregar la nueva fila en la parte superior
+            agregarFilaEnLaParteSuperior(conta, nuevoDato);
+            incrementarContador()
+        };
+    </script>
+    
+
+    <script>
+        var source = new EventSource("/stream");
+        var datosContainer = document.getElementById('datos-container');
+
+        source.onmessage = function(event) {
+            var nuevoDato = document.createElement("p");
+            nuevoDato.textContent = event.data;
+            datosContainer.appendChild(nuevoDato);
+        };
+    </script>
+</body>
+</html>
