@@ -69,16 +69,5 @@
         };
     </script>
     
-
-    <script>
-        var source = new EventSource("/stream");
-        var datosContainer = document.getElementById('datos-container');
-
-        source.onmessage = function(event) {
-            var nuevoDato = document.createElement("p");
-            nuevoDato.textContent = event.data;
-            datosContainer.appendChild(nuevoDato);
-        };
-    </script>
 </body>
 </html>
