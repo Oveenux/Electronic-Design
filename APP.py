@@ -17,10 +17,10 @@ def enviar_datos():
 
     while True:
         conexion = mysql.connector.connect(
-            host = "locationdb.col4pixfadqv.us-east-2.rds.amazonaws.com",
-            user = "root",
-            password= "123456789",
-            database= "LocationDB"
+            host = 
+            user = 
+            password= 
+            database= 
         )
 
         cursor = conexion.cursor()
